@@ -1,0 +1,4 @@
+rootProject.name = 'sportfoglalas'
+
+include 'sportfoglalas-domain'
+include 'sportfoglalas-application'

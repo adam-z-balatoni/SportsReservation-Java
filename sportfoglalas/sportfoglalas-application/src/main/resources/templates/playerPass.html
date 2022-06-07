@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bérlet</title>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" type="image/png" href="pictures/tennis-favicon.png"/>
+
+    <script src="./src/bootstrap-input-spinner.js"></script>
+    <script>
+        $("input[type='number']").inputSpinner()
+        $("input[type='number']").inputSpinner({ buttonsOnly: true, autoInterval: undefined })
+    </script>
+
+    <style>
+        .container {
+            padding: 2rem 0rem;
+        }
+
+        h4 {
+            margin: 2rem 0rem 1rem 0rem;
+        }
+
+        .custom-control-label::before,
+        .custom-control-label::after {
+            top: .8rem;
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        body {
+            background-color: rgb(255, 255, 255)
+        }
+
+        .padding {
+            padding: 2rem !important
+        }
+
+        .card {
+            margin-bottom: 30px;
+            border: none;
+            -webkit-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
+            -moz-box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22);
+            box-shadow: 0px 1px 2px 1px rgba(154, 154, 204, 0.22)
+        }
+
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #e6e6f2
+        }
+
+        h3 {
+            font-size: 20px
+        }
+
+        h5 {
+            font-size: 15px;
+            line-height: 26px;
+            color: #3d405c;
+            margin: 0px 0px 15px 0px;
+            font-family: 'Circular Std Medium'
+        }
+
+        .text-dark {
+            color: #3d405c !important
+        }
+
+      
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="playerReservation">Foglalás</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="playerMyReservations">Foglalásaim</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="playerPass">Bérlet</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="playerInvoice">Számla</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="login">Kilépés</a>
+                </li>
+            </ul>
+        </div>
+        <p class="text-right" th:text="${'Belépve ezzel a felhasználóval: ' + currentUser.username}"></p>
+    </nav>
+
+    <div id="berlet">
+        <div class="container">
+            <div id="berlet-row" class="row justify-content-center align-items-center">
+                <div id="berlet-column" class="col-md-6">
+                    <div id="berlet-box" class="col-md-12">
+
+                        <form  id="myForm" th:action="@{/playerPass/save}" method="post"
+                              th:object="${PlayerPassDTO}">
+                            <h3>Válaszd ki milyen bérletet szeretnél vásárolni!</h3>
+
+                            <div class="row">
+                                <div class="col form-group">
+                                    Sport Neve:
+                                </div>
+                                <div class="col form-group">
+                                    <select class="browser-default custom-select" name="sportCategory" th:field="*{sportName}">
+                                        <option th:each="sportCategory : ${sportCategory}"
+                                                th:text="${sportCategory.name}" th:value="${sportCategory.name}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col form-group">
+                                    Bérlet típusa:
+                                </div>
+                                <div class="col form-group">
+                                    <select class="browser-default custom-select" th:field="*{passType}">
+                                        <option th:each="pass : ${passTypes}" th:text="${pass}" th:value="${pass}"></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <input type="submit" name="submit" class="btn btn-info btn-md" value="Vásárlás">
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--    <div class="modal fade" tabindex="-1" role="dialog" id="myModal">-->
+<!--        <div class="modal-dialog" role="document">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h4 class="modal-title">Sikeres tranzakció!</h4>-->
+<!--                    <button type="button" class="btn btn-default" data-dismiss="modal">X</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <script>-->
+<!--        $('#myForm').on('submit', function (e) {-->
+<!--            $('#myModal').modal('show');-->
+<!--            e.preventDefault();-->
+<!--        });-->
+<!--    </script>-->
+
+</body>
+
+</html>
